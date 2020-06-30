@@ -62,7 +62,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
 	logger.request(req.method, JSON.stringify(req.body));
 
 	/* Run pA Script */
-	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param ${req.body.id},${req.body.rueckmeldeNummer},${req.body.artikel},${path.join(__dirname,'exports')}`,
+	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param "${req.body.id}","${req.body.rueckmeldeNummer}","${req.body.artikel}","${path.join(__dirname,'exports')}"`,
 		(error, stdout, stderr) => {
 			if (error) {
 				logger.log(`error: ${error.message}`);
