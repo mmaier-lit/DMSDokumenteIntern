@@ -29,10 +29,10 @@
 /*                                                                           */
 /*---------------------------------------------------------------------------*/
 
-define variable as character cUUID    no-undo.
-define variable as character cArtikel no-undo. 
-define variable as character cRueckNr no-undo.
-define variable as character cAusgabe no-undo.
+define variable cUUID    as character no-undo.
+define variable cArtikel as character no-undo. 
+define variable cRueckNr as character no-undo.
+define variable cAusgabe as character no-undo.
 
 /* Übergebene Parameter auspacken */ 
 assign
