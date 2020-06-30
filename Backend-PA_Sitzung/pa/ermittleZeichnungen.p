@@ -48,7 +48,7 @@ assign
   cAusgabe = cAusgabe + chr(92) + cUUID + '.xml'.
 
 /* Initialize Logging */  
-output to cLogging.
+output to string(cLogging).
 
 /* TempTable für den XML Export definieren */
 define temp-table ttDMSZeichnungen no-undo
