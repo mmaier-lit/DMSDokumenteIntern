@@ -87,9 +87,7 @@ define temp-table ttDMSZeichnungen no-undo
 
       for each bOD_Archive
         where bOD_Archive.DokID = bOS_Schlagworte.DokID
-        no-lock
-        use-index Version
-        break b bOD_Archive.ArchivIDRef:
+        no-lock:
         
         create ttDMSZeichnungen.
 
