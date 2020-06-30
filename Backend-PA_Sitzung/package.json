@@ -11,6 +11,6 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "odbc": "^2.2.2"
+    "uuidv4": "^6.1.1"
   }
 }

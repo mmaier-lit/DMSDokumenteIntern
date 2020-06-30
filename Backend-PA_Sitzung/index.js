@@ -1,12 +1,50 @@
 /* Includes */
-const odbc = require('odbc');
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
+const path = require('path');
+const fs = require('fs');
+const { uuid } = require('uuidv4');
+const Logger = require('./logger/logger.js')
 
 
-/* Statische Dateien des DMS einbinden: Über Netzfreigabe verfügbar machen */
-app.use(express.static('\\\\192.168.60.59\\Users\\mmaier\\Desktop\\Aeschlimann\\demo-dms'));
+/* Use Command Execution and overrite it with sync callback */
+const exec = require('child_process').exec;
+
+function os_func() {
+    this.execCommand = function(cmd, callback) {
+        exec(cmd, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`exec error: ${error}`);
+                return;
+            }
+
+            callback(stdout);
+        });
+    }
+}
+var os = new os_func();
+
+/* Global Configurations */
+
+
+/* Global Logging */
+const logger = new Logger();
+logger.on('message', data => {
+	const loggingText = `${data.date}: ${data.message}`;
+	fs.appendFile(path.join(__dirname,'server.log'), loggingText + '\n' , err => {
+		if(err) throw err;
+	});
+	console.log(loggingText);
+});
+
+logger.on('request', data => {
+	const loggingText = `${data.date} [${data.type}]: ${data.message}`;
+	fs.appendFile(path.join(__dirname,'requests.log'), loggingText + '\n' , err => {
+		if(err) throw err;
+	});
+	console.log(loggingText);
+});
 
 /* Body Parser einbinden */
 app.use(
@@ -16,41 +54,24 @@ app.use(
   );
 app.use(bodyParser.json());
 
-/* DSN vom Kunden für pA-Database */
-const connectionString = "DSN=PAVAR;PWD=compakt";
 
-odbc.connect(connectionString, (error, connection) => {
-	if (error) {
-		console.log(error);
-	}
-
-	/* Start Server */
-	app.listen(8080, function () {
-		console.log('[SERVER]  Server listening on port 8080!');
-	});
-
-	/* Endpoint: [ermittleZeichnungen] */
-	app.post('/ermittleZeichnungen', function (req, res) {
-		let time = Date.now();
-		console.log(req.body);
-		console.log('[SERVER]  Request  --> /ermittleZeichnungen!');
-		connection.query(`select * from pp_zeichnung where rueckmeldeNr = ${req.body.rueckmeldeNr}`, function (err, rows, moreResultSets) {
-
-			if (err) {
-				return console.log(err);
-			}
-			res.send(rows);
-		});
-		time = Date.now() - time;
-		console.log('[SERVER]  Response <-- /ermittleZeichnungen! (' + time + 'ms)');
-	});
-
-	/* Endpoint: [Download] - für download der DMS Dokumente */
-	app.get('/download', function (req, res) {
-		/* TODO: auf Post umstellen Angabe zur richtigen Zeichnung mitgeben */
-		res.download('\\\\192.168.60.59\\Users\\mmaier\\Desktop\\Aeschlimann\\demo-dms\\test.pa', 'test.txt');
-	});
-
+/* Start Server */
+app.listen(8080, function () {
+	logger.log('Serverstart: Server is now listening on port 8080!');
 });
 
+/* Endpoint: [ermittleZeichnungen] */
+app.post('/ermittleZeichnungen', function (req, res) {
+    /* create new uuid */
+	Object.assign(req.body, {id: uuid()});
 
+	/* Log the information */
+	logger.log('New Request "/ermittleZeichnungen!" assigned ID=' + req.body.id);
+	logger.request(req.method, JSON.stringify(req.body));
+
+	/* Run pA Script */
+	os.execCommand('D:/Progress/OpenEdge/bin/_progres -p test.p -pf pa.pf -b -param hello', function (returnvalue) {
+		// Here you can get the return value
+	});
+    res.end("ok");
+});
