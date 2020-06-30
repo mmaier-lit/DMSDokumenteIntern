@@ -55,7 +55,6 @@ define temp-table ttDMSZeichnungen no-undo
     ID.
 
 /* Zeichnungen suchen und in TempTable schreiben */
-
     define buffer bOS_Schlagworte        for OS_Schlagworte.
     define buffer bOD_Archive            for OD_Archive.
     define buffer bPP_Auftrag            for PP_Auftrag.
@@ -69,8 +68,9 @@ define temp-table ttDMSZeichnungen no-undo
           and bPP_Auftrag.RueckmeldeNr = integer(cRueckNr)
       no-lock no-error.
 
-      if not available bPP_Auftrag then
-        return.
+      if not available bPP_Auftrag then do:
+        undo, THROW NEW Progress.Lang.AppError("Can't take a delivery order after closing time.", 550).
+      end.
     end. /* cRueckNr > '':U */
 
     for each bOS_Schlagworte
@@ -81,9 +81,7 @@ define temp-table ttDMSZeichnungen no-undo
 
       for each bOD_Archive
         where bOD_Archive.DokID = bOS_Schlagworte.DokID
-        no-lock
-        use-index Version
-        break b bOD_Archive.ArchivIDRef:
+        no-lock:
         
         create ttDMSZeichnungen.
 
