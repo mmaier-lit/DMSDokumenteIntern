@@ -56,12 +56,12 @@ app.use(bodyParser.json());
 
 
 /* Start Server */
-app.listen(8080, function () {
+app.listen(8080, () => {
 	logger.log('Serverstart: Server is now listening on port 8080!');
 });
 
 /* Endpoint: [ermittleZeichnungen] */
-app.post('/ermittleZeichnungen', function (req, res) {
+app.post('/ermittleZeichnungen', (req, res) => {
     /* create new uuid */
 	Object.assign(req.body, {id: uuid()});
 
@@ -70,8 +70,7 @@ app.post('/ermittleZeichnungen', function (req, res) {
 	logger.request(req.method, JSON.stringify(req.body));
 
 	/* Run pA Script */
-	os.execCommand('D:/Progress/OpenEdge/bin/_progres -p test.p -pf pa.pf -b -param hello', function (returnvalue) {
-		// Here you can get the return value
+	os.execCommand('D:/Progress/OpenEdge/bin/_progres -p pa/test.p -pf config/pa.pf -b -param req.body.id,req.body.rueckmeldeNummer,req.body.artikel', returnvalue => {
+		res.end("ok");
 	});
-    res.end("ok");
 });

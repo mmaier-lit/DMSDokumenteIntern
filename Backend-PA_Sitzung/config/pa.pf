@@ -1,0 +1,12 @@
+-db pavar
+-H 10.45.74.31
+-S 12000
+-ld basis
+-N TCP
+-T c:/temp
+
+-Mm 16384
+
+-cpstream   1252
+-cpinternal 1252
+-cpcoll     BASIC
