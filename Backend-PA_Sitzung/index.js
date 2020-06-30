@@ -5,27 +5,8 @@ const app = express();
 const path = require('path');
 const fs = require('fs');
 const { uuid } = require('uuidv4');
+const { exec } = require('child_process');
 const Logger = require('./logger/logger.js')
-
-
-/* Use Command Execution and overrite it with sync callback */
-const exec = require('child_process').exec;
-
-function os_func() {
-    this.execCommand = function(cmd, callback) {
-        exec(cmd, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`exec error: ${error}`);
-                return;
-            }
-
-            callback(stdout);
-        });
-    }
-}
-var os = new os_func();
-
-/* Global Configurations */
 
 
 /* Global Logging */
@@ -70,7 +51,16 @@ app.post('/ermittleZeichnungen', (req, res) => {
 	logger.request(req.method, JSON.stringify(req.body));
 
 	/* Run pA Script */
-	os.execCommand(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param ${req.body.id},${req.body.rueckmeldeNummer},${req.body.artikel},${path.join(__dirname,'exporte')}`, returnvalue => {
-		res.end("ok");
+	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param ${req.body.id},${req.body.rueckmeldeNummer},${req.body.artikel},${path.join(__dirname,'exporte')}`,
+		(error, stdout, stderr) => {
+			if (error) {
+				logger.log(`error: ${error.message}`);
+				res.end("bad" + error);
+			}
+			if (stderr) {
+				logger.log(`stderr: ${stderr}`);
+				res.end("bad" + stderr);
+			}
+			res.end("ok" + stdout);
 	});
 });
