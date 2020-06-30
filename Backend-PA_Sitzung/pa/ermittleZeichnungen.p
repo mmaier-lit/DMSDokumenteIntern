@@ -54,40 +54,46 @@ define temp-table ttDMSZeichnungen no-undo
 
 /* Zeichnungen suchen und in TempTable schreiben */
 
-    define buffer byOS_Schlagworte        for OS_Schlagworte.
-    define buffer byOS_SchlagworteIndexNo for OS_Schlagworte.
-    define buffer byOD_Archive            for OD_Archive.
+    define buffer bOS_Schlagworte        for OS_Schlagworte.
+    define buffer bOD_Archive            for OD_Archive.
+    define buffer bPP_Auftrag            for PP_Auftrag.
+    define buffer bS_Artikel             for S_Artikel.
+    define buffer bP_ZeichnungArtikel    for P_ZeichnungArtikel.
+    define buffer bP_Zeichnung           for P_Zeichnung.
+    
+    if cRueckNr > '':U then do:
+      find bPP_Auftrag
+        where bPP_Auftrag.Firma        = pa-firma
+          and bPP_Auftrag.RueckmeldeNr = cRueckNr
+      no-lock.
 
-    define variable iySchlagwortDokID  as integer   no-undo.
-    define variable iyExportedDrawings as integer   no-undo.
-    define variable cyExportedDrawing  as character no-undo.
-    define variable cyExportTypes      as character no-undo.
+      if not available bPP_Auftrag then
+        throw new Progress.Lang.AppError('Es wurde kein passender Produktionsauftrag gefunden!',1).
+    end. /* cRueckNr > '':U */
 
-    iySchlagwortDokID = 40.
-
-    for each byOS_Schlagworte
-      where byOS_Schlagworte.DokTypID = iySchlagwortDokID
-      and byOS_Schlagworte.SchlagwortID = 1006
-      and byOS_Schlagworte.SchlagwortWert = cArtikel
+    for each bOS_Schlagworte
+      where bOS_Schlagworte.DokTypID = 40
+      and bOS_Schlagworte.SchlagwortID = 1006
+      and bOS_Schlagworte.SchlagwortWert = cArtikel
       no-lock:
 
-      for each byOD_Archive
-        where byOD_Archive.DokID = byOS_Schlagworte.DokID
+      for each bOD_Archive
+        where bOD_Archive.DokID = bOS_Schlagworte.DokID
         no-lock
         use-index Version
-        break by byOD_Archive.ArchivIDRef:
+        break b bOD_Archive.ArchivIDRef:
         
         create ttDMSZeichnungen.
 
         assign 
           iCounter = iCounter + 1
           ttDMSZeichnungen.ID      = iCounter
-          ttDMSZeichnungen.Name    = byOD_Archive.Dateiname
-          ttDMSZeichnungen.IndexNr = byOD_Archive.Archivversion.
+          ttDMSZeichnungen.Name    = bOD_Archive.Dateiname
+          ttDMSZeichnungen.IndexNr = bOD_Archive.Archivversion.
 
         validate ttDMSZeichnungen.
-      end. /* for each byOD_Archive */
-    end. /* for each byOS_Schlagworte */
+      end. /* for each bOD_Archive */
+    end. /* for each bOS_Schlagworte */
 
 /* TempTable exportieren */
 Temp-Table ttDMSZeichnungen:write-xml('file':U, 			    /* TargetType 		*/
