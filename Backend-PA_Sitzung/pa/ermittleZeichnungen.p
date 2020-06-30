@@ -74,7 +74,7 @@ define temp-table ttDMSZeichnungen no-undo
 
       find bS_Artikel
         where bS_Artikel.Firma  = pa-firma
-          and bS_Artikel.Artkel = bPP_Auftrag.Artikel
+          and bS_Artikel.Artikel = bPP_Auftrag.Artikel
       no-lock no-error.
 
       if not available bS_Artikel then do:
@@ -84,7 +84,7 @@ define temp-table ttDMSZeichnungen no-undo
     else do: /* Keine RueckNr, deswegen Artikel direkt suchen */
       find bS_Artikel
         where bS_Artikel.Firma  = pa-firma
-          and bS_Artikel.Artkel = cArtikel
+          and bS_Artikel.Artikel = cArtikel
       no-lock no-error.
 
       if not available bS_Artikel then do:
