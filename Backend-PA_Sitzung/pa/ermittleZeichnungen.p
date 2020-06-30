@@ -64,7 +64,6 @@ define temp-table ttDMSZeichnungen no-undo
     define variable cyExportedDrawing  as character no-undo.
     define variable cyExportTypes      as character no-undo.
 
-    pcExportedDrawings = '':U.
     iySchlagwortDokID = 40.
 
     for each byOS_Schlagworte
