@@ -65,7 +65,7 @@ define temp-table ttDMSZeichnungen no-undo
       find bPP_Auftrag
         where bPP_Auftrag.Firma        = pa-firma
           and bPP_Auftrag.RueckmeldeNr = cRueckNr
-      no-lock.
+      no-lock no-error.
 
       if not available bPP_Auftrag then
         throw new Progress.Lang.AppError('Es wurde kein passender Produktionsauftrag gefunden!',1).
