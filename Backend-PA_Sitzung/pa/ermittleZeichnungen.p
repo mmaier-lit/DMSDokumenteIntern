@@ -35,6 +35,9 @@ define variable cRueckNr as character no-undo.
 define variable cAusgabe as character no-undo.
 define variable iCounter as integer   no-undo.
 
+/* Logging */
+output to cAusgabe + 'client.log'.
+
 /* Übergebene Parameter auspacken */ 
 assign
   cUUID    = entry(1, session:parameter)
@@ -43,6 +46,7 @@ assign
   cAusgabe = entry(4, session:parameter)
   cAusgabe = cAusgabe + chr(92) + cUUID + '.xml'.
 
+put unformatted cUUID + '|' + cRueckNr + '|' + cArtikel skip.
 
 /* TempTable für den XML Export definieren */
 define temp-table ttDMSZeichnungen no-undo
