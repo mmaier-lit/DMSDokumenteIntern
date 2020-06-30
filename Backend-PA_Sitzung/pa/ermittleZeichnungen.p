@@ -95,7 +95,7 @@ define temp-table ttDMSZeichnungen no-undo
     for each bOS_Schlagworte
       where bOS_Schlagworte.DokTypID = 40
       and bOS_Schlagworte.SchlagwortID = 1006
-      and bOS_Schlagworte.SchlagwortWert = cArtikel
+      and bOS_Schlagworte.SchlagwortWert = bS_Artikel.Artikel
       no-lock:
 
       for each bOD_Archive
