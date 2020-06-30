@@ -40,7 +40,7 @@ assign
   cArtikel = entry(2, session:parameter)
   cRueckNr = entry(3, session:parameter)
   cAusgabe = entry(4, session:parameter)
-  cAusgabe = cAusgabe + chr(47) + cUUID + chr(47) + '.xml'.
+  cAusgabe = cAusgabe + chr(92) + cUUID + '.xml'.
 
 
 /* TempTable für den XML Export definieren */
