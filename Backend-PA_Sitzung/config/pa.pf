@@ -1,6 +1,6 @@
 -db pavar
 -H 10.45.74.31
--S 14000
+-S 13000
 -ld basis
 -N TCP
 -T c:/temp
