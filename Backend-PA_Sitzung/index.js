@@ -10,8 +10,12 @@ const Logger = require('./logger/logger.js')
 
 
 /* Create Folders to avoid write errors to non existent folders */
-fs.mkdirSync(path.join(__dirname,'logs'));
-fs.mkdirSync(path.join(__dirname,'exports'));
+if (!fs.existsSync(path.join(__dirname,'logs'))) {
+	fs.mkdirSync(path.join(__dirname,'logs'));
+}
+if (!fs.existsSync(path.join(__dirname,'exports'))) {
+	fs.mkdirSync(path.join(__dirname,'exports'));
+}
 
 
 /* Global Logging */
