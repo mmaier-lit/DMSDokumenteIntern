@@ -38,8 +38,8 @@ define variable iCounter as integer   no-undo.
 /* Übergebene Parameter auspacken */ 
 assign
   cUUID    = entry(1, session:parameter)
-  cArtikel = entry(2, session:parameter)
-  cRueckNr = entry(3, session:parameter)
+  cRueckNr = entry(2, session:parameter)
+  cArtikel = entry(3, session:parameter)
   cAusgabe = entry(4, session:parameter)
   cAusgabe = cAusgabe + chr(92) + cUUID + '.xml'.
 
