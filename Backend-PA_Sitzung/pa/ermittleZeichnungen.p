@@ -34,9 +34,11 @@ define variable cArtikel as character no-undo.
 define variable cRueckNr as character no-undo.
 define variable cAusgabe as character no-undo.
 define variable iCounter as integer   no-undo.
+define variable pa-firma as character no-undo.
 
 /* Übergebene Parameter auspacken */ 
 assign
+  pa-firma = '000':U
   cUUID    = entry(1, session:parameter)
   cRueckNr = entry(2, session:parameter)
   cArtikel = entry(3, session:parameter)
