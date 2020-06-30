@@ -9,6 +9,11 @@ const { exec } = require('child_process');
 const Logger = require('./logger/logger.js')
 
 
+/* Create Folders to avoid write errors to non existent folders */
+fs.mkdirSync(path.join(__dirname,'logs'));
+fs.mkdirSync(path.join(__dirname,'exports'));
+
+
 /* Global Logging */
 const logger = new Logger();
 logger.on('message', data => {
@@ -27,6 +32,7 @@ logger.on('request', data => {
 	console.log(loggingText);
 });
 
+
 /* Body Parser einbinden */
 app.use(
 	bodyParser.urlencoded({
@@ -41,6 +47,7 @@ app.listen(8080, () => {
 	logger.log('Serverstart: Server is now listening on port 8080!');
 });
 
+
 /* Endpoint: [ermittleZeichnungen] */
 app.post('/ermittleZeichnungen', (req, res) => {
     /* create new uuid */
@@ -51,7 +58,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
 	logger.request(req.method, JSON.stringify(req.body));
 
 	/* Run pA Script */
-	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param ${req.body.id},${req.body.rueckmeldeNummer},${req.body.artikel},${path.join(__dirname,'exporte')}`,
+	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param ${req.body.id},${req.body.rueckmeldeNummer},${req.body.artikel},${path.join(__dirname,'exports')}`,
 		(error, stdout, stderr) => {
 			if (error) {
 				logger.log(`error: ${error.message}`);
