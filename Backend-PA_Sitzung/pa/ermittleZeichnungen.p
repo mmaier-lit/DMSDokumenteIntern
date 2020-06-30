@@ -33,6 +33,7 @@ define variable cUUID    as character no-undo.
 define variable cArtikel as character no-undo. 
 define variable cRueckNr as character no-undo.
 define variable cAusgabe as character no-undo.
+define variable iCounter as integer   no-undo.
 
 /* Übergebene Parameter auspacken */ 
 assign
@@ -53,14 +54,41 @@ define temp-table ttDMSZeichnungen no-undo
     ID.
 
 /* Zeichnungen suchen und in TempTable schreiben */
-create ttDMSZeichnungen.
 
-assign
-  ttDMSZeichnungen.ID      = 1
-  ttDMSZeichnungen.Name    = 'testName':U
-  ttDMSZeichnungen.IndexNr = 0.
+    define buffer byOS_Schlagworte        for OS_Schlagworte.
+    define buffer byOS_SchlagworteIndexNo for OS_Schlagworte.
+    define buffer byOD_Archive            for OD_Archive.
 
-validate ttDMSZeichnungen.
+    define variable iySchlagwortDokID  as integer   no-undo.
+    define variable iyExportedDrawings as integer   no-undo.
+    define variable cyExportedDrawing  as character no-undo.
+    define variable cyExportTypes      as character no-undo.
+
+    iySchlagwortDokID = 40.
+
+    for each byOS_Schlagworte
+      where byOS_Schlagworte.DokTypID = iySchlagwortDokID
+      and byOS_Schlagworte.SchlagwortID = 1006
+      and byOS_Schlagworte.SchlagwortWert = cArtikel
+      no-lock:
+
+      for each byOD_Archive
+        where byOD_Archive.DokID = byOS_Schlagworte.DokID
+        no-lock
+        use-index Version
+        break by byOD_Archive.ArchivIDRef:
+        
+        create ttDMSZeichnungen.
+
+        assign 
+          iCounter = iCounter + 1
+          ttDMSZeichnungen.ID      = iCounter
+          ttDMSZeichnungen.Name    = byOD_Archive.Dateiname
+          ttDMSZeichnungen.IndexNr = byOD_Archive.Archivversion.
+
+        validate ttDMSZeichnungen.
+      end. /* for each byOD_Archive */
+    end. /* for each byOS_Schlagworte */
 
 /* TempTable exportieren */
 Temp-Table ttDMSZeichnungen:write-xml('file':U, 			    /* TargetType 		*/
