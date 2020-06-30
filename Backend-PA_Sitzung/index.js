@@ -32,7 +32,7 @@ var os = new os_func();
 const logger = new Logger();
 logger.on('message', data => {
 	const loggingText = `${data.date}: ${data.message}`;
-	fs.appendFile(path.join(__dirname,'server.log'), loggingText + '\n' , err => {
+	fs.appendFile(path.join(__dirname,'logs','server.log'), loggingText + '\n' , err => {
 		if(err) throw err;
 	});
 	console.log(loggingText);
@@ -40,7 +40,7 @@ logger.on('message', data => {
 
 logger.on('request', data => {
 	const loggingText = `${data.date} [${data.type}]: ${data.message}`;
-	fs.appendFile(path.join(__dirname,'requests.log'), loggingText + '\n' , err => {
+	fs.appendFile(path.join(__dirname,'logs','requests.log'), loggingText + '\n' , err => {
 		if(err) throw err;
 	});
 	console.log(loggingText);
@@ -70,7 +70,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
 	logger.request(req.method, JSON.stringify(req.body));
 
 	/* Run pA Script */
-	os.execCommand('D:/Progress/OpenEdge/bin/_progres -p pa/test.p -pf config/pa.pf -b -param req.body.id,req.body.rueckmeldeNummer,req.body.artikel', returnvalue => {
+	os.execCommand(`D:/Progress/OpenEdge/bin/_progres -p pa/test.p -pf config/pa.pf -b -param ${req.body.id},${req.body.rueckmeldeNummer},${req.body.artikel}`, returnvalue => {
 		res.end("ok");
 	});
 });
