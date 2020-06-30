@@ -47,7 +47,7 @@ assign
 define temp-table ttDMSZeichnungen no-undo
   field ID                        as integer
   field Name                      as character
-  field Index                     as integer
+  field IndexNr                   as integer
 
   index Main is unique primary
     ID.
@@ -56,14 +56,14 @@ define temp-table ttDMSZeichnungen no-undo
 create ttDMSZeichnungen.
 
 assign
-  ttDMSZeichnungen.ID    = 1
-  ttDMSZeichnungen.Name  = 'testName':U
-  ttDMSZeichnungen.Index = 0.
+  ttDMSZeichnungen.ID      = 1
+  ttDMSZeichnungen.Name    = 'testName':U
+  ttDMSZeichnungen.IndexNr = 0.
 
 validate ttDMSZeichnungen.
 
 /* TempTable exportieren */
-Temp-Table ttDMSZeichnungen:write:xml('file':U, 			    /* TargetType 		*/
+Temp-Table ttDMSZeichnungen:write-xml('file':U, 			    /* TargetType 		*/
                                       cAusgabe,                 /* File 			*/
                                       yes, 						/* Formatted 		*/
                                       ?,						/* Encoding 		*/
