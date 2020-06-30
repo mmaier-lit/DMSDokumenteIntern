@@ -33,6 +33,7 @@ define variable cUUID    as character no-undo.
 define variable cArtikel as character no-undo. 
 define variable cRueckNr as character no-undo.
 define variable cAusgabe as character no-undo.
+define variable cLogging as character no-undo.
 define variable iCounter as integer   no-undo.
 define variable pa-firma as character no-undo.
 
@@ -43,7 +44,11 @@ assign
   cRueckNr = entry(2, session:parameter)
   cArtikel = entry(3, session:parameter)
   cAusgabe = entry(4, session:parameter)
+  cLogging = cAusgabe + chr(92) + cUUID + '.error'
   cAusgabe = cAusgabe + chr(92) + cUUID + '.xml'.
+
+/* Initialize Logging */  
+output to cLogging.
 
 /* TempTable für den XML Export definieren */
 define temp-table ttDMSZeichnungen no-undo
@@ -70,7 +75,8 @@ define temp-table ttDMSZeichnungen no-undo
       no-lock no-error.
 
       if not available bPP_Auftrag then
-        throw new Progress.Lang.AppError('Es wurde kein passender Produktionsauftrag gefunden!',1).
+        put unformatted 'Es wurde kein passender Produktionsauftrag gefunden!':U.
+        return.
     end. /* cRueckNr > '':U */
 
     for each bOS_Schlagworte
