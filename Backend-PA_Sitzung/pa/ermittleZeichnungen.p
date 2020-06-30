@@ -69,9 +69,28 @@ define temp-table ttDMSZeichnungen no-undo
       no-lock no-error.
 
       if not available bPP_Auftrag then do:
-        undo, THROW NEW Progress.Lang.AppError("Can't take a delivery order after closing time.", 550).
+        undo, THROW NEW Progress.Lang.AppError("Es wurde kein Produktionsauftrag gefunden!", 550).
+      end.
+
+      find bS_Artikel
+        where bS_Artikel.Firma  = pa-firma
+          and bS_Artikel.Artkel = bPP_Auftrag.Artikel
+      no-lock no-error.
+
+      if not available bS_Artikel then do:
+        undo, THROW NEW Progress.Lang.AppError("Der Artikel des Produktionsauftrags wurde nicht gefunden!", 550).
       end.
     end. /* cRueckNr > '':U */
+    else do: /* Keine RueckNr, deswegen Artikel direkt suchen */
+      find bS_Artikel
+        where bS_Artikel.Firma  = pa-firma
+          and bS_Artikel.Artkel = cArtikel
+      no-lock no-error.
+
+      if not available bS_Artikel then do:
+        undo, THROW NEW Progress.Lang.AppError("Der Artikel wurde nicht gefunden!", 550).
+      end.
+    end. /* else cRueckNr > '':U */
 
     for each bOS_Schlagworte
       where bOS_Schlagworte.DokTypID = 40
