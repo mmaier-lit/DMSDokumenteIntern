@@ -66,7 +66,7 @@ define temp-table ttDMSZeichnungen no-undo
     if cRueckNr > '':U then do:
       find bPP_Auftrag
         where bPP_Auftrag.Firma        = pa-firma
-          and bPP_Auftrag.RueckmeldeNr = cRueckNr
+          and bPP_Auftrag.RueckmeldeNr = integer(cRueckNr)
       no-lock no-error.
 
       if not available bPP_Auftrag then
