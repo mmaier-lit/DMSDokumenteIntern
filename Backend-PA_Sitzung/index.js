@@ -72,6 +72,10 @@ app.post('/ermittleZeichnungen', (req, res) => {
 				logger.log(`stderr: ${stderr}`);
 				res.end("bad" + stderr);
 			}
-			res.end("ok" + stdout);
+			if(stdout != "") {
+				res.statusCode = 400;
+				res.end(stdout)
+			}
+			res.end("ok");
 	});
 });
