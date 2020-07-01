@@ -18,13 +18,17 @@ export class AppComponent{
   suchen() {
     if(this.rueckmeldeNr || this.artikel) {
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
-        this.zeichnungen = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
+        if(data.includes('error:')){
+          console.log('error')
+        } else {
+          this.zeichnungen = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
+        }
       })
     }
   }
 
   download() {
     window.open('http://localhost:8080/download');
-}
+  }
 
 }
