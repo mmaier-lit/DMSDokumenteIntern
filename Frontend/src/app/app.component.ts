@@ -16,7 +16,7 @@ export class AppComponent{
   }
 
   suchen() {
-    if(this.rueckmeldeNr) {
+    if(this.rueckmeldeNr || this.artikel) {
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
         this.zeichnungen = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
       })
