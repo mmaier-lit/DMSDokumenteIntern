@@ -6,7 +6,8 @@ const path = require('path');
 const fs = require('fs');
 const { uuid } = require('uuidv4');
 const { exec } = require('child_process');
-const Logger = require('./logger/logger.js')
+const Logger = require('./logger/logger.js');
+const xmlParser = require('xml2json');
 
 
 /* Create Folders to avoid write errors to non existent folders */
@@ -63,19 +64,26 @@ app.post('/ermittleZeichnungen', (req, res) => {
 
 	/* Run pA Script */
 	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param "${req.body.id}","${req.body.rueckmeldeNummer}","${req.body.artikel}","${path.join(__dirname,'exports')}"`,
-		(error, stdout, stderr) => {
-			if (error) {
-				logger.log(`error: ${error.message}`);
-				res.end("bad" + error);
-			}
-			if (stderr) {
-				logger.log(`stderr: ${stderr}`);
-				res.end("bad" + stderr);
-			}
-			if(stdout != "") {
-				res.statusCode = 400;
-				res.end(stdout)
-			}
-			res.end("ok");
+  (error, stdout, stderr) => {
+    if (error) {
+      logger.log(`error: ${error.message}`);
+      res.statusCode = 400;
+      res.end(error);
+    }
+    if (stderr) {
+      logger.log(`stderr: ${stderr}`);
+      res.statusCode = 400;
+      res.end(stderr);
+    }
+    if(stdout != "") {
+      res.statusCode = 400;
+      res.end(stdout)
+    }
+    
+    /* file was successfully written */
+    fs.readFile(path.join(__dirname, 'exports', req.body.id + '.xml'), (err, data) => {
+      if(err) logger.log(`xml-read-errpr: ${err}`);
+      res.end(xmlParser.toJson(data));
+    });			
 	});
 });
