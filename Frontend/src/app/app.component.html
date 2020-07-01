@@ -1,10 +1,15 @@
 <div class="content">
-  <div class="search">
+  <div class="search" spellcheck="false">
+    <span class="headline">DMS Zeichnungen</span>
     <mat-form-field class="rueckmeldeNummerInput">
       <mat-label>Rückmeldenummer</mat-label>
-      <input matInput [(ngModel)]="rueckmeldeNr" placeholder="Rückmeldenummer eingeben" autocomplete="off">
+      <input matInput [(ngModel)]="rueckmeldeNr" [disabled]="artikel != ''" autocomplete="off">
     </mat-form-field>
-    <button mat-raised-button color="primary" (click)="suchen()">Suchen</button>
+    <mat-form-field class="artikelInput">
+      <mat-label>Artikel</mat-label>
+      <input matInput [(ngModel)]="artikel" [disabled]="rueckmeldeNr != ''" autocomplete="off">
+    </mat-form-field>
+    <button mat-flat-button (click)="suchen()">Zeichnungen Suchen</button>
   </div>
   
   <mat-list>

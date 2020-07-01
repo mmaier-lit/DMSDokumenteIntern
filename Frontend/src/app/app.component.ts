@@ -8,13 +8,15 @@ import { BackendService } from './backend.service';
 })
 export class AppComponent{
   test = 'lit-zeichnungen';
-  rueckmeldeNr = 6851;
+  rueckmeldeNr = "";
+  artikel = "";
   zeichnungen;
 
   constructor(public backend: BackendService) {
   }
 
   suchen() {
+    if(this.rueckmeldeNr.length > 0 && this.ze)
     if(this.rueckmeldeNr) {
       this.backend.suchen(this.rueckmeldeNr).subscribe(data => {
         this.zeichnungen = data;

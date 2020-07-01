@@ -1,16 +1,58 @@
-.content{
-    width: 80%;
-    margin: 50px auto;
+
+input {
+    caret-color: white !important;
 }
-.search{
+::ng-deep .mat-focused .mat-form-field-label {
+    /*change color of label*/
+    color: white !important;
+}
+
+::ng-deep .mat-input-element::placeholder{
+    color: white;
+}
+
+::ng-deep mat-label {
+/*change color of label*/
+    color: white !important;
+}
+
+::ng-deep.mat-form-field-underline {
+/*change color of underline*/
+    background-color: white !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+/*change color of underline when focused*/
+    background-color: white !important;
+}
+
+.mat-form-field-disabled {
+    opacity: 0.3 !important;
+}
+.content{
+    width: 100%;
+    margin: 0px auto;
     text-align: center;
 }
+.search{
+    text-align: right;
+    background: #365aab;
+    padding: 15px 30px 5px;
+    color: white;
+}
 
-.rueckmeldeNummerInput {
-    width: 600px;
-    margin-right: 20px;
-  }
-.mat-button {
-    margin-left: -50px;
-
+.rueckmeldeNummerInput, .artikelInput, .mat-flat-button {
+    margin: 0px 10px;
+}
+.rueckmeldeNummerInput, .artikelInput {
+    width: 280px;
+}
+.headline {
+    color: #ffffffb3;
+    font-size: 23px;
+    position: absolute;
+    left: 20px;
+    top: 30px;
+    font-family: Roboto,Helvetica Neue,sans-serif;
+    font-weight: 500;
 }
