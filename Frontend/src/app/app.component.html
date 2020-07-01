@@ -16,7 +16,7 @@
     <div mat-subheader>Zeichnungen</div>
     <mat-list-item *ngFor="let zeichnung of zeichnungen">
       <mat-icon mat-list-icon>description</mat-icon>
-      <div mat-line>{{zeichnung.Zeichnung}} </div>
+      <div mat-line>{{zeichnung.name}} </div>
       <button mat-icon-button>
         <button mat-button color="primary" (click)="download()">Download</button>
       </button>

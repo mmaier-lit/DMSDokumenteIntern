@@ -16,10 +16,9 @@ export class AppComponent{
   }
 
   suchen() {
-    if(this.rueckmeldeNr.length > 0 && this.ze)
     if(this.rueckmeldeNr) {
-      this.backend.suchen(this.rueckmeldeNr).subscribe(data => {
-        this.zeichnungen = data;
+      this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
+        this.zeichnungen = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
       })
     }
   }

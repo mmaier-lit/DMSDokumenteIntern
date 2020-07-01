@@ -8,7 +8,7 @@ export class BackendService {
 
   constructor(private http: HttpClient) { }
   
-  suchen(rueckmeldeNr: Number) {
-    return this.http.post("/lit-backend/ermittleZeichnungen", {"rueckmeldeNr": rueckmeldeNr});
+  suchen(rueckmeldeNr: String, artikel: String): any {
+    return this.http.post("/lit-backend/ermittleZeichnungen", {"rueckmeldeNummer": rueckmeldeNr,"artikel": artikel});
   }
 }
