@@ -11,18 +11,19 @@
     </mat-form-field>
     <button mat-flat-button (click)="suchen()">Zeichnungen Suchen</button>
   </div>
-  
-  <mat-list>
-    <div mat-subheader>Zeichnungen</div>
-    <mat-list-item *ngFor="let zeichnung of zeichnungen">
-      <mat-icon mat-list-icon>description</mat-icon>
-      <div mat-line>{{zeichnung.name}} </div>
-      <button mat-icon-button>
-        <button mat-button color="primary" (click)="download()">Download</button>
-      </button>
-      <mat-divider></mat-divider>
-    </mat-list-item>
-  </mat-list>
+  <div class="zeichnungen">
+    <mat-list>
+      <div mat-subheader>Zeichnungen</div>
+      <mat-list-item *ngFor="let zeichnung of zeichnungen">
+        <mat-icon mat-list-icon>description</mat-icon>
+        <div mat-line>{{zeichnung.ID}}: {{zeichnung.Name}}</div>
+        <button mat-icon-button>
+          <button mat-button color="primary" (click)="download()">Download</button>
+        </button>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-list>
+   </div>
 
 </div>
  

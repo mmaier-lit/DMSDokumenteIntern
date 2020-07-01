@@ -68,16 +68,19 @@ app.post('/ermittleZeichnungen', (req, res) => {
     if (error) {
       logger.log(`error: ${error.message}`);
       res.statusCode = 400;
-      res.end(error);
+	  res.end(error);
+	  return;
     }
     if (stderr) {
-      logger.log(`stderr: ${stderr}`);
-      res.statusCode = 400;
-      res.end(stderr);
+		logger.log(`stderr: ${stderr}`);
+		res.statusCode = 400;
+		res.end(stderr);
+		return;
     }
     if(stdout != "") {
-      res.statusCode = 400;
-      res.end(stdout)
+		res.statusCode = 400;
+		res.end(stdout)
+		return;
     }
     
     /* file was successfully written */
