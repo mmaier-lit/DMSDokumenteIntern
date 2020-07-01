@@ -79,7 +79,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
     }
     if(stdout != "") {
 		res.statusCode = 400;
-		res.end(`error: ${error.stdout}`)
+		res.end(`error: ${stdout}`)
 		return;
     }
     
