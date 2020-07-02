@@ -14,7 +14,7 @@ export class AppComponent implements OnInit{
   artikel = "";
 
   displayedColumns: string[] = ['id', 'name', 'version', 'download'];
-  dataSource;
+  dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   
@@ -22,6 +22,7 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit() {
+    this.dataSource = new MatTableDataSource();
     this.dataSource.sort = this.sort;
   }
 
@@ -29,13 +30,13 @@ export class AppComponent implements OnInit{
     if (this.rueckmeldeNr || this.artikel) {
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
         /* Add Data and Sort */
-        this.dataSource = new MatTableDataSource(data.ttDMSZeichnungen.ttDMSZeichnungenRow);
+        this.dataSource.data = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
       })
     }
   }
 
-  download(zeichnung) {
-    this.backend.download(zeichnung);
+  download(zeichnung){
+    this.backend.download(zeichnung).subscribe(data => console.log(data));
   }
 
 }
