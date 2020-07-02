@@ -97,7 +97,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
 		const container = req.query.container; 
 		const file = req.query.file;
 		const extension = req.query.extension;
-
 		const queryString = `${volume}\\dms\\${container}\\${file}.pa`;
+
 		res.download('\\\\31VS-PA-DBS\\dms\\test\\' + queryString, `${file}.${extension}`);
 	});
