@@ -9,7 +9,6 @@ const { exec } = require('child_process');
 const Logger = require('./logger/logger.js');
 const xmlParser = require('xml2json');
 
-
 /* Create Folders to avoid write errors to non existent folders */
 if (!fs.existsSync(path.join(__dirname,'logs'))) {
 	fs.mkdirSync(path.join(__dirname,'logs'));
@@ -90,3 +89,17 @@ app.post('/ermittleZeichnungen', (req, res) => {
     });			
 	});
 });
+
+
+/* Endpoint: [Download] - für download der DMS Dokumente */
+	app.post('/download', function (req, res) {
+		/* TODO: auf Post umstellen Angabe zur richtigen Zeichnung mitgeben */
+		/* match data like:
+		{
+			vol:
+			cont:
+			name:
+			ext:
+		} */
+		res.download('\\\\31VS-PA-DBS\\dms\\test.pa', 'test.pdf');
+	});

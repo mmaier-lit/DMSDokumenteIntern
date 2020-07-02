@@ -49,19 +49,28 @@ assign
 define temp-table ttDMSZeichnungen no-undo
   field ID                        as integer
   field Name                      as character
-  field IndexNr                   as integer
+  field VersionNumber             as integer
+  field Volume                    as character
+  field Container                 as character
+  field FileExtension             as character
 
   index Main is unique primary
     ID.
 
 /* Zeichnungen suchen und in TempTable schreiben */
     define buffer bOS_Schlagworte        for OS_Schlagworte.
+    define buffer bOD_Dokumente          for OD_Dokumente.
     define buffer bOD_Archive            for OD_Archive.
     define buffer bPP_Auftrag            for PP_Auftrag.
     define buffer bS_Artikel             for S_Artikel.
     define buffer bP_ZeichnungArtikel    for P_ZeichnungArtikel.
     define buffer bP_Zeichnung           for P_Zeichnung.
+    define buffer bOD_Container          for OD_Container.
+    define buffer bOD_Volumen            for OD_Volumen.
     
+    /* ----------------------------------------------------------------------------- */
+    /* - RückmeldeNummer ----------------------------------------------------------- */
+    /* ----------------------------------------------------------------------------- */
     if cRueckNr > '':U then do:
       find bPP_Auftrag
         where bPP_Auftrag.Firma        = pa-firma
@@ -69,7 +78,7 @@ define temp-table ttDMSZeichnungen no-undo
       no-lock no-error.
 
       if not available bPP_Auftrag then do:
-        undo, THROW NEW Progress.Lang.AppError("Es wurde kein Produktionsauftrag gefunden!", 550).
+        undo, THROW NEW Progress.Lang.AppError("Der Produktionsauftrag " + cRueckNr + " wurde nicht gefunden!", 550).
       end.
 
       find bS_Artikel
@@ -78,19 +87,75 @@ define temp-table ttDMSZeichnungen no-undo
       no-lock no-error.
 
       if not available bS_Artikel then do:
-        undo, THROW NEW Progress.Lang.AppError("Der Artikel des Produktionsauftrags wurde nicht gefunden!", 550).
+        undo, THROW NEW Progress.Lang.AppError("Der Artikel des Produktionsauftrags " + cRueckNr + " wurde nicht gefunden!", 550).
       end.
-    end. /* cRueckNr > '':U */
-    else do: /* Keine RueckNr, deswegen Artikel direkt suchen */
-      find bS_Artikel
-        where bS_Artikel.Firma  = pa-firma
-          and bS_Artikel.Artikel = cArtikel
-      no-lock no-error.
+    
+      Loop1: for each bOS_Schlagworte
+        where bOS_Schlagworte.DokTypID = 40
+        and bOS_Schlagworte.SchlagwortID = 1006
+        and bOS_Schlagworte.SchlagwortWert = bS_Artikel.Artikel
+        no-lock:
 
-      if not available bS_Artikel then do:
-        undo, THROW NEW Progress.Lang.AppError("Der Artikel wurde nicht gefunden!", 550).
-      end.
-    end. /* else cRueckNr > '':U */
+        for each bOD_Archive
+          where bOD_Archive.DokID = bOS_Schlagworte.DokID
+          no-lock:
+
+          find bOD_Container
+            where bOD_Container.ContainerID = bOD_Archive.ContainerID
+          no-lock.
+
+          if not available bOD_Container then do:
+            undo, THROW NEW Progress.Lang.AppError("Der Container " + string(bOD_Archive.ContainerID) + " wurde nicht gefunden!", 550).
+          end.
+
+          find bOD_Volumen
+            where bOD_Volumen.VolumenID = bOD_Container.VolumenID
+          no-lock.
+
+          if not available bOD_Container then do:
+            undo, THROW NEW Progress.Lang.AppError("Das Volumen " + string(bOD_Container.VolumenID) + " wurde nicht gefunden!", 550).
+          end.  
+
+          find bOD_Dokumente
+            where bOD_Dokumente.DokID = bOS_Schlagworte.DokID
+          no-lock.
+
+          if not available bOD_Dokumente then do:
+            undo, THROW NEW Progress.Lang.AppError("Das Dokument zur DokID " + string(bOS_Schlagworte.DokID) + " wurde nicht gefunden!", 550).
+          end.        
+          
+
+          /* Abbruchbedingung, damit nicht zu viele geladen werden */
+          if iCounter > 99 then
+            leave Loop1.
+
+          create ttDMSZeichnungen.
+
+          assign 
+            iCounter                       = iCounter + 1
+            ttDMSZeichnungen.ID            = iCounter
+            ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
+            ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
+            ttDMSZeichnungen.VersionNumber = bOD_Dokumente.DokumentVersion
+            ttDMSZeichnungen.Volume        = bOD_Volumen.Name
+            ttDMSZeichnungen.Container     = bOD_Container.Name.
+            .
+
+          validate ttDMSZeichnungen.
+        end. /* for each bOD_Archive */
+      end. /* for each bOS_Schlagworte */
+    end. /* cRueckNr > '':U */
+
+
+
+    /* ----------------------------------------------------------------------------- */
+    /* - Artikel ------------------------------------------------------------------- */
+    /* ----------------------------------------------------------------------------- */
+    if cArtikel > '':U and cRueckNr = '' then do:
+      Loop2: for each bS_Artikel
+        where bS_Artikel.Firma  = pa-firma
+          and bS_Artikel.Artikel begins cArtikel
+      no-lock:
 
     for each bOS_Schlagworte
       where bOS_Schlagworte.DokTypID = 40
@@ -101,18 +166,53 @@ define temp-table ttDMSZeichnungen no-undo
       for each bOD_Archive
         where bOD_Archive.DokID = bOS_Schlagworte.DokID
         no-lock:
+
+        find bOD_Container
+          where bOD_Container.ContainerID = bOD_Archive.ContainerID
+        no-lock.
+
+        if not available bOD_Container then do:
+          undo, THROW NEW Progress.Lang.AppError("Der Container " + string(bOD_Archive.ContainerID) + " wurde nicht gefunden!", 550).
+        end.
+
+        find bOD_Volumen
+          where bOD_Volumen.VolumenID = bOD_Container.VolumenID
+        no-lock.
+
+        if not available bOD_Container then do:
+          undo, THROW NEW Progress.Lang.AppError("Das Volumen " + string(bOD_Container.VolumenID) + " wurde nicht gefunden!", 550).
+        end.  
+
+        find bOD_Dokumente
+          where bOD_Dokumente.DokID = bOS_Schlagworte.DokID
+        no-lock.
+
+        if not available bOD_Dokumente then do:
+          undo, THROW NEW Progress.Lang.AppError("Das Dokument zur DokID " + string(bOS_Schlagworte.DokID) + " wurde nicht gefunden!", 550).
+        end.        
         
+
+        /* Abbruchbedingung, damit nicht zu viele geladen werden */
+        if iCounter > 99 then
+          leave Loop2.
+
         create ttDMSZeichnungen.
 
         assign 
           iCounter = iCounter + 1
-          ttDMSZeichnungen.ID      = iCounter
-          ttDMSZeichnungen.Name    = bOD_Archive.Dateiname
-          ttDMSZeichnungen.IndexNr = bOD_Archive.Archivversion.
+          ttDMSZeichnungen.ID            = iCounter
+          ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
+          ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
+          ttDMSZeichnungen.VersionNumber = bOD_Dokumente.DokumentVersion
+          ttDMSZeichnungen.Volume        = bOD_Volumen.Name
+          ttDMSZeichnungen.Container     = bOD_Container.Name.
+          .
 
         validate ttDMSZeichnungen.
       end. /* for each bOD_Archive */
     end. /* for each bOS_Schlagworte */
+    end. /* cArtikel > '':U */
+  end. /* Loop2 (label) */
 
 /* TempTable exportieren */
 Temp-Table ttDMSZeichnungen:write-xml('file':U, 			    /* TargetType 		*/
