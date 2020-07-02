@@ -49,6 +49,7 @@ assign
 define temp-table ttDMSZeichnungen no-undo
   field ID                        as integer
   field Name                      as character
+  field DMSName                   as character
   field VersionNumber             as integer
   field Volume                    as character
   field Container                 as character
@@ -135,6 +136,7 @@ define temp-table ttDMSZeichnungen no-undo
             iCounter                       = iCounter + 1
             ttDMSZeichnungen.ID            = iCounter
             ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
+            ttDMSZeichnungen.DMSName       = bOD_Archive.Name
             ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
             ttDMSZeichnungen.VersionNumber = bOD_Dokumente.DokumentVersion
             ttDMSZeichnungen.Volume        = bOD_Volumen.Name
@@ -202,6 +204,7 @@ define temp-table ttDMSZeichnungen no-undo
           iCounter = iCounter + 1
           ttDMSZeichnungen.ID            = iCounter
           ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
+          ttDMSZeichnungen.DMSName       = bOD_Archive.Name
           ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
           ttDMSZeichnungen.VersionNumber = bOD_Dokumente.DokumentVersion
           ttDMSZeichnungen.Volume        = bOD_Volumen.Name

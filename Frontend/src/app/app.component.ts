@@ -36,7 +36,7 @@ export class AppComponent implements OnInit{
   }
 
   download(zeichnung){
-    window.open(`http://localhost:8080/download?volume=${zeichnung.Volume}&container=${zeichnung.Container}&file=${zeichnung.Name}&extension=${zeichnung.FileExtension}`);
+    window.open(`http://localhost:8080/download?volume=${zeichnung.Volume}&container=${zeichnung.Container}&file=${zeichnung.DMSName}&extension=${zeichnung.FileExtension}`);
   }
 
 }
