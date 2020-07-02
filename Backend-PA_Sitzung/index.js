@@ -63,7 +63,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
 
 	/* Run pA Script */
 	exec(`D:/Progress/OpenEdge/bin/_progres -p pa/ermittleZeichnungen.p -pf config/pa.pf -b -param "${req.body.id}","${req.body.rueckmeldeNummer}","${req.body.artikel}","${path.join(__dirname,'exports')}"`,
-  (error, stdout, stderr) => {
+    (error, stdout, stderr) => {
     if (error) {
       logger.log(`error: ${error.message}`);
       res.statusCode = 400;
@@ -101,5 +101,6 @@ app.post('/ermittleZeichnungen', (req, res) => {
 			name:
 			ext:
 		} */
+		logger.request(req.method, JSON.stringify(req.body));
 		res.download('\\\\31VS-PA-DBS\\dms\\test.pa', 'test.pdf');
 	});

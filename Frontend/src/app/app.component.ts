@@ -24,7 +24,7 @@ export class AppComponent implements OnInit{
   ngOnInit() {
     this.dataSource.sort = this.sort;
   }
-  
+
   suchen() {
     if (this.rueckmeldeNr || this.artikel) {
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
@@ -35,7 +35,7 @@ export class AppComponent implements OnInit{
   }
 
   download(volume: String, container: String) {
-    window.open('http://localhost:8080/download');
+    this.backend.download(zeichnung);
   }
 
 }
