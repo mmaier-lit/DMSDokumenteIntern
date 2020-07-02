@@ -29,13 +29,17 @@
     <!-- Weight Column -->
     <ng-container matColumnDef="version">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Weight </th>
-      <td mat-cell *matCellDef="let zeichnung"> {{zeichnung.version}} </td>
+      <td mat-cell *matCellDef="let zeichnung"> {{zeichnung.VersionNumber}} </td>
     </ng-container>
   
     <!-- Symbol Column -->
     <ng-container matColumnDef="download">
       <th mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </th>
-      <td mat-cell *matCellDef="let zeichnung"> download </td>
+      <td mat-cell *matCellDef="let zeichnung">
+        <button mat-icon-button>
+          <button mat-button color="primary" (click)="download(zeichnung.Volume, zeichnung.Container)">Download</button>
+        </button>
+      </td>
     </ng-container>
   
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -13,7 +13,7 @@ export class AppComponent {
   rueckmeldeNr = "";
   artikel = "";
 
-  displayedColumns: string[] = ['id', 'name', 'version', 'download'];
+  displayedColumns: string[] = ['ID', 'DokumentName', 'Version', 'Download'];
   dataSource;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
