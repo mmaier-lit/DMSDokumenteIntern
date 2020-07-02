@@ -29,6 +29,12 @@ input {
 .mat-form-field-disabled {
     opacity: 0.3 !important;
 }
+.mat-raised-button {
+    opacity: 0.6;
+}
+.mat-raised-button:hover {
+    opacity: 1;
+}
 .content{
     width: 100%;
     padding-top: 100px;
