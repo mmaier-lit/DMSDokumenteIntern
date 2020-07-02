@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { BackendService } from './backend.service';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
@@ -8,7 +8,7 @@ import {MatTableDataSource} from '@angular/material/table';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
 
   rueckmeldeNr = "";
   artikel = "";
@@ -21,12 +21,15 @@ export class AppComponent {
   constructor(public backend: BackendService) {
   }
 
+  ngOnInit() {
+    this.dataSource.sort = this.sort;
+  }
+  
   suchen() {
     if (this.rueckmeldeNr || this.artikel) {
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
         /* Add Data and Sort */
         this.dataSource = new MatTableDataSource(data.ttDMSZeichnungen.ttDMSZeichnungenRow);
-        this.dataSource.sort = this.sort;
       })
     }
   }

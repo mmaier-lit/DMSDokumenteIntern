@@ -31,11 +31,17 @@ input {
 }
 .content{
     width: 100%;
+    padding-top: 100px;
     margin: 0px auto;
     text-align: center;
 }
 .search{
     text-align: right;
+    position: fixed;
+    top: 0px;
+    z-index: 999;
+    width: 100%;
+    box-sizing: border-box;
     background: #365aab;
     padding: 15px 30px 5px;
     color: white;
@@ -49,7 +55,7 @@ input {
     width: 280px;
 }
 .headline {
-    color: #ffffffb3;
+    color: #ffffff;
     font-size: 23px;
     position: absolute;
     left: 20px;
@@ -71,4 +77,5 @@ input {
  table {
     width: 80%;
     margin: 0px auto;
+    text-align: left;
   }
