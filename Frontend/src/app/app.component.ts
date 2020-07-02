@@ -34,7 +34,7 @@ export class AppComponent implements OnInit{
     }
   }
 
-  download(volume: String, container: String) {
+  download(zeichnung) {
     this.backend.download(zeichnung);
   }
 
