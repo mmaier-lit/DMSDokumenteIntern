@@ -92,15 +92,12 @@ app.post('/ermittleZeichnungen', (req, res) => {
 
 
 /* Endpoint: [Download] - für download der DMS Dokumente */
-	app.post('/download', function (req, res) {
-		/* TODO: auf Post umstellen Angabe zur richtigen Zeichnung mitgeben */
-		/* match data like:
-		{
-			vol:
-			cont:
-			name:
-			ext:
-		} */
-		logger.request(req.method, JSON.stringify(req.body));
-		res.download('\\\\31VS-PA-DBS\\dms\\test.pa', 'test.pdf');
+	app.get('/download', function (req, res) {
+		const volume = req.param.volume;
+		const container = req.param.container; 
+		const file = req.param.file;
+		const extension = req.param.extension;
+
+		const queryString = `${volume}\\${container}\\${file}.pa`;
+		res.download('\\\\31VS-PA-DBS\\dms\\test\\' + queryString, `${file}.${extension}`);
 	});
