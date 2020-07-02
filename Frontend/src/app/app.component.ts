@@ -1,28 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { BackendService } from './backend.service';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
-  test = 'lit-zeichnungen';
+export class AppComponent {
+
   rueckmeldeNr = "";
   artikel = "";
-  zeichnungen;
 
+  displayedColumns: string[] = ['id', 'name', 'version', 'download'];
+  dataSource;
+
+  @ViewChild(MatSort, {static: true}) sort: MatSort;
+  
   constructor(public backend: BackendService) {
   }
 
   suchen() {
-    if(this.rueckmeldeNr || this.artikel) {
+    if (this.rueckmeldeNr || this.artikel) {
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
-        if(data.includes('error:')){
-          console.log('error')
-        } else {
-          this.zeichnungen = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
-        }
+        /* Add Data and Sort */
+        this.dataSource = new MatTableDataSource(data.ttDMSZeichnungen.ttDMSZeichnungenRow);
+        this.dataSource.sort = this.sort;
       })
     }
   }

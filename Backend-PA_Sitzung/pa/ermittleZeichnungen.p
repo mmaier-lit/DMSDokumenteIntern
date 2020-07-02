@@ -215,12 +215,12 @@ define temp-table ttDMSZeichnungen no-undo
   end. /* Loop2 (label) */
 
 /* TempTable exportieren */
-Temp-Table ttDMSZeichnungen:write-xml('file':U, 			    /* TargetType 		*/
-                                      cAusgabe,                 /* File 			*/
-                                      yes, 						/* Formatted 		*/
-                                      ?,						/* Encoding 		*/
-                                      ?,						/* SchemaLocation 	*/
+Temp-Table ttDMSZeichnungen:write-xml('file':U, 			/* TargetType 	  */
+                                      cAusgabe,       /* File 			    */
+                                      yes, 						/* Formatted 		  */
+                                      ?,						  /* Encoding 		  */
+                                      ?,						  /* SchemaLocation */
                                       no, 						/* WriteSchema 		*/
-                                      no).						/* MinSchema 		*/
+                                      no).						/* MinSchema 		  */
 
 quit.
