@@ -13,7 +13,7 @@ export class AppComponent {
   rueckmeldeNr = "";
   artikel = "";
 
-  displayedColumns: string[] = ['ID', 'DokumentName', 'Version', 'Download'];
+  displayedColumns: string[] = ['id', 'name', 'version', 'download'];
   dataSource;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
@@ -31,7 +31,7 @@ export class AppComponent {
     }
   }
 
-  download() {
+  download(volume: String, container: String) {
     window.open('http://localhost:8080/download');
   }
 
