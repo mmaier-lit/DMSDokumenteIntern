@@ -50,7 +50,7 @@ define temp-table ttDMSZeichnungen no-undo
   field ID                        as integer
   field Name                      as character
   field DMSName                   as character
-  field Index                     as character
+  field IndexNumber               as character
   field VersionNumber             as integer
   field Volume                    as character
   field Container                 as character
@@ -145,7 +145,7 @@ define temp-table ttDMSZeichnungen no-undo
           ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
           ttDMSZeichnungen.DMSName       = bOD_Archive.Name
           ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
-          ttDMSZeichnungen.Index         = bOS_Schlagworte2.SchlagwortWert
+          ttDMSZeichnungen.IndexNumber   = bOS_Schlagworte2.SchlagwortWert
           ttDMSZeichnungen.VersionNumber = bOD_Archive.ArchivVersion
           ttDMSZeichnungen.Volume        = bOD_Volumen.Name
           ttDMSZeichnungen.Container     = bOD_Container.Name.
@@ -219,7 +219,7 @@ define temp-table ttDMSZeichnungen no-undo
           ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
           ttDMSZeichnungen.DMSName       = bOD_Archive.Name
           ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
-          ttDMSZeichnungen.Index         = bOS_Schlagworte2.SchlagwortWert
+          ttDMSZeichnungen.IndexNumber   = bOS_Schlagworte2.SchlagwortWert
           ttDMSZeichnungen.VersionNumber = bOD_Archive.ArchivVersion
           ttDMSZeichnungen.Volume        = bOD_Volumen.Name
           ttDMSZeichnungen.Container     = bOD_Container.Name.
