@@ -12,6 +12,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatSortModule } from '@angular/material/sort';
 
 
 
@@ -30,7 +31,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatListModule,
     MatIconModule,
     MatTableModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatSortModule
+  ],
+  exports: [
+    MatSortModule
   ],
   providers: [],
   bootstrap: [AppComponent]
