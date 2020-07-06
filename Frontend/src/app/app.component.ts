@@ -14,7 +14,7 @@ export class AppComponent implements OnInit{
   rueckmeldeNr = "";
   artikel = "";
 
-  displayedColumns: string[] = ['id', 'name', 'version', 'download'];
+  displayedColumns: string[] = ['id', 'name', 'index', 'version', 'download'];
   dataSource: MatTableDataSource<any>;
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;

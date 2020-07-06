@@ -50,6 +50,7 @@ define temp-table ttDMSZeichnungen no-undo
   field ID                        as integer
   field Name                      as character
   field DMSName                   as character
+  field Index                     as character
   field VersionNumber             as integer
   field Volume                    as character
   field Container                 as character
@@ -60,6 +61,7 @@ define temp-table ttDMSZeichnungen no-undo
 
 /* Zeichnungen suchen und in TempTable schreiben */
     define buffer bOS_Schlagworte        for OS_Schlagworte.
+    define buffer bOS_Schlagworte2       for OS_Schlagworte.
     define buffer bOD_Dokumente          for OD_Dokumente.
     define buffer bOD_Archive            for OD_Archive.
     define buffer bPP_Auftrag            for PP_Auftrag.
@@ -128,22 +130,28 @@ define temp-table ttDMSZeichnungen no-undo
 
           /* Abbruchbedingung, damit nicht zu viele geladen werden */
           if iCounter > 99 then
-            leave Loop1.
+          leave Loop2.
 
-          create ttDMSZeichnungen.
+        find bOS_Schlagworte2
+          where bOS_Schlagworte2.DokID        = bOS_Schlagworte.DokID
+            and bOS_Schlagworte2.SchlagwortID = 1010
+          no-lock no-error.
 
-          assign 
-            iCounter                       = iCounter + 1
-            ttDMSZeichnungen.ID            = iCounter
-            ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
-            ttDMSZeichnungen.DMSName       = bOD_Archive.Name
-            ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
-            ttDMSZeichnungen.VersionNumber = bOD_Dokumente.DokumentVersion
-            ttDMSZeichnungen.Volume        = bOD_Volumen.Name
-            ttDMSZeichnungen.Container     = bOD_Container.Name.
-            .
+        create ttDMSZeichnungen.
 
-          validate ttDMSZeichnungen.
+        assign 
+          iCounter                       = iCounter + 1
+          ttDMSZeichnungen.ID            = iCounter
+          ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
+          ttDMSZeichnungen.DMSName       = bOD_Archive.Name
+          ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
+          ttDMSZeichnungen.Index         = bOS_Schlagworte2.SchlagwortWert
+          ttDMSZeichnungen.VersionNumber = bOD_Archive.ArchivVersion
+          ttDMSZeichnungen.Volume        = bOD_Volumen.Name
+          ttDMSZeichnungen.Container     = bOD_Container.Name.
+          .
+
+        validate ttDMSZeichnungen.
         end. /* for each bOD_Archive */
       end. /* for each bOS_Schlagworte */
     end. /* cRueckNr > '':U */
@@ -198,15 +206,21 @@ define temp-table ttDMSZeichnungen no-undo
         if iCounter > 99 then
           leave Loop2.
 
+        find bOS_Schlagworte2
+          where bOS_Schlagworte2.DokID        = bOS_Schlagworte.DokID
+            and bOS_Schlagworte2.SchlagwortID = 1010
+          no-lock no-error.
+
         create ttDMSZeichnungen.
 
         assign 
-          iCounter = iCounter + 1
+          iCounter                       = iCounter + 1
           ttDMSZeichnungen.ID            = iCounter
           ttDMSZeichnungen.Name          = bOD_Archive.Dateiname
           ttDMSZeichnungen.DMSName       = bOD_Archive.Name
           ttDMSZeichnungen.FileExtension = bOD_Archive.DateiExtension
-          ttDMSZeichnungen.VersionNumber = bOD_Dokumente.DokumentVersion
+          ttDMSZeichnungen.Index         = bOS_Schlagworte2.SchlagwortWert
+          ttDMSZeichnungen.VersionNumber = bOD_Archive.ArchivVersion
           ttDMSZeichnungen.Volume        = bOD_Volumen.Name
           ttDMSZeichnungen.Container     = bOD_Container.Name.
           .
