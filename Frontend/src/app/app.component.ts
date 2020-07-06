@@ -2,6 +2,7 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { BackendService } from './backend.service';
 import {MatSort} from '@angular/material/sort';
 import {MatTableDataSource} from '@angular/material/table';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +19,10 @@ export class AppComponent implements OnInit{
 
   @ViewChild(MatSort, {static: true}) sort: MatSort;
   
-  constructor(public backend: BackendService) {
+  constructor(
+    public backend: BackendService,
+    private _snackBar: MatSnackBar
+    ) {
   }
 
   ngOnInit() {
@@ -31,9 +35,11 @@ export class AppComponent implements OnInit{
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
         /* Add Data and Sort */
         this.dataSource.data = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
-      }), error => {
-        console.log('error' + error);
-      }
+      }, error => {
+          this._snackBar.open(error, 'HTTP Error!', {
+            duration: 3000,
+          });
+      })
     }
   }
 
