@@ -37,7 +37,7 @@ tr:hover {
 }
 .content{
     width: 100%;
-    padding-top: 100px;
+    padding-top: 135px;
     margin: 0px auto;
     text-align: center;
 }
@@ -85,3 +85,22 @@ tr:hover {
     margin: 0px auto;
     text-align: left;
   }
+  
+::ng-deep .mat-simple-snackbar {
+    justify-content: space-around !important;
+} 
+::ng-deep .mat-snack-bar-container {
+    border-radius: 0px !important;
+    box-sizing: border-box !important;
+    display: block !important;
+    margin: 0px !important;
+    position:fixed !important;
+    top: 77px !important;
+    z-index: 800 !important;
+    right: 0px !important;
+    min-width: 100vw !important;
+    text-align: center;
+    padding: 14px 16px !important;
+    min-height: 48px !important;
+    transform-origin: center !important;
+}

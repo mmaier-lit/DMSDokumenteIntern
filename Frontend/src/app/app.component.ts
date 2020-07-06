@@ -36,7 +36,7 @@ export class AppComponent implements OnInit{
         /* Add Data and Sort */
         this.dataSource.data = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
       }, error => {
-          this._snackBar.open(error.error, 'Fehler!', {
+          this._snackBar.open(error.error, '[ Fehler ]', {
             duration: 3000,
             verticalPosition: 'top',
             horizontalPosition: 'center'
