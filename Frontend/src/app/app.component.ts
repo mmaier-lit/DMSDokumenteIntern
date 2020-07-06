@@ -50,7 +50,7 @@ export class AppComponent implements OnInit{
   }
 
   download(zeichnung){
-    window.open(`http://localhost:8080/download?volume=${zeichnung.Volume}&container=${zeichnung.Container}&file=${zeichnung.DMSName}&extension=${zeichnung.FileExtension}`);
+    window.open(`http://30vs-pa-aps:8080/download?volume=${zeichnung.Volume}&container=${zeichnung.Container}&file=${zeichnung.DMSName}&extension=${zeichnung.FileExtension}`);
   }
 
   sortData(sort: Sort) {
