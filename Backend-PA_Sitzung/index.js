@@ -69,18 +69,18 @@ app.post('/ermittleZeichnungen', (req, res) => {
     if (error) {
       logger.log(`error: ${error.message}`);
       res.statusCode = 400;
-	  res.end(`error: ${error.message}`);
+	  res.end(`${error.message}`);
 	  return;
     }
     if (stderr) {
 		logger.log(`error: ${stderr}`);
 		res.statusCode = 400;
-		res.end(`error: ${stderr}`);
+		res.end(`${stderr}`);
 		return;
     }
     if(stdout != "") {
 		res.statusCode = 400;
-		res.end(`error: ${stdout}`)
+		res.end(`${stdout}`)
 		return;
     }
     
@@ -88,7 +88,7 @@ app.post('/ermittleZeichnungen', (req, res) => {
     fs.readFile(path.join(__dirname, 'exports', req.body.id + '.xml'), (err, data) => {
       if(err) {
 		logger.log(`xml-read-error: ${err}`);
-		res.end(`xml-read-error: ${err}`);
+		res.end(`${err}`);
 		return;
 	  }  
       res.end(xmlParser.toJson(data));
