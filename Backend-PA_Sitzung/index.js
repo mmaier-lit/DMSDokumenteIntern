@@ -49,7 +49,7 @@ app.use(bodyParser.json());
 
 
 /* Start Server */
-app.listen(8080, () => {
+app.listen(8080, '0.0.0.0', () => {
 	logger.log('Serverstart: Server is now listening on port 8080!');
 });
 
