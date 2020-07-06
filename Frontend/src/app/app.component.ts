@@ -31,7 +31,9 @@ export class AppComponent implements OnInit{
       this.backend.suchen(this.rueckmeldeNr, this.artikel).subscribe(data => {
         /* Add Data and Sort */
         this.dataSource.data = data.ttDMSZeichnungen.ttDMSZeichnungenRow;
-      })
+      }), error => {
+        console.log('error' + error);
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-/* Includes */
+/* Include Libraries */
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
@@ -9,6 +9,7 @@ const { exec } = require('child_process');
 const Logger = require('./logger/logger.js');
 const xmlParser = require('xml2json');
 
+
 /* Create Folders to avoid write errors to non existent folders */
 if (!fs.existsSync(path.join(__dirname,'logs'))) {
 	fs.mkdirSync(path.join(__dirname,'logs'));
@@ -18,26 +19,27 @@ if (!fs.existsSync(path.join(__dirname,'exports'))) {
 }
 
 
-/* Global Logging */
+/* Global Logging for messages */
 const logger = new Logger();
 logger.on('message', data => {
 	const loggingText = `${data.date}: ${data.message}`;
 	fs.appendFile(path.join(__dirname,'logs','server.log'), loggingText + '\n' , err => {
-		if(err) throw err;
+		if(err) throw err; // beim loggen darf das Backend beendet werden!
 	});
 	console.log(loggingText);
 });
 
+/* Global Logging for requests */
 logger.on('request', data => {
 	const loggingText = `${data.date} [${data.type}]: ${data.message}`;
 	fs.appendFile(path.join(__dirname,'logs','requests.log'), loggingText + '\n' , err => {
-		if(err) throw err;
+		if(err) throw err; // beim loggen darf das Backend beendet werden!
 	});
 	console.log(loggingText);
 });
 
 
-/* Body Parser einbinden */
+/* include Body Parser */
 app.use(
 	bodyParser.urlencoded({
 	  extended: true
@@ -84,7 +86,11 @@ app.post('/ermittleZeichnungen', (req, res) => {
     
     /* file was successfully written */
     fs.readFile(path.join(__dirname, 'exports', req.body.id + '.xml'), (err, data) => {
-      if(err) logger.log(`xml-read-errpr: ${err}`);
+      if(err) {
+		logger.log(`xml-read-error: ${err}`);
+		res.end(`xml-read-error: ${err}`);
+		return;
+	  }  
       res.end(xmlParser.toJson(data));
     });			
 	});
@@ -93,11 +99,22 @@ app.post('/ermittleZeichnungen', (req, res) => {
 
 /* Endpoint: [Download] - für download der DMS Dokumente */
 	app.get('/download', function (req, res) {
+		/* Download Path zum DMS zusammenbauen */
 		const volume = req.query.volume;
 		const container = req.query.container; 
 		const file = req.query.file;
 		const extension = req.query.extension;
 		const queryString = `${volume}\\dms\\${container}\\${file}.pa`;
+
+		/* Save new information to logging */
+		Object.assign(req.body, {id: uuid()});
+		Object.assign(req.body, {downloadPath: queryString});
+		Object.assign(req.body, {downloadExt: extension});
+
+		/* Log the information */
+		logger.log('New Request "/download!" assigned ID=' + req.body.id);
+		logger.request(req.method, JSON.stringify(req.body));
+
 
 		res.download('\\\\31VS-PA-DBS\\dms\\test\\' + queryString, `${file}.${extension}`);
 	});
