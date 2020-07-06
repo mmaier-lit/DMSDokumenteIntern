@@ -38,6 +38,8 @@ export class AppComponent implements OnInit{
       }, error => {
           this._snackBar.open(error.error, 'Fehler!', {
             duration: 3000,
+            verticalPosition: 'top',
+            horizontalPosition: 'center'
           });
       })
     }
