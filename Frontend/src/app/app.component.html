@@ -51,21 +51,6 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-
-  <!-- <div class="zeichnungen">
-    <mat-list>
-      <div mat-subheader>Zeichnungen</div>
-      <mat-list-item *ngFor="let zeichnung of zeichnungen">
-        <mat-icon mat-list-icon>description</mat-icon>
-        <div mat-line>{{zeichnung.ID}}: {{zeichnung.Name}}</div>
-        <button mat-icon-button>
-          <button mat-button color="primary" (click)="download()">Download</button>
-        </button>
-        <mat-divider></mat-divider>
-      </mat-list-item>
-    </mat-list>
-   </div> -->
-
 </div>
  
 <router-outlet></router-outlet>
