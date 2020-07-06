@@ -130,7 +130,7 @@ define temp-table ttDMSZeichnungen no-undo
 
           /* Abbruchbedingung, damit nicht zu viele geladen werden */
           if iCounter > 99 then
-          leave Loop2.
+          leave Loop1.
 
         find bOS_Schlagworte2
           where bOS_Schlagworte2.DokID        = bOS_Schlagworte.DokID
